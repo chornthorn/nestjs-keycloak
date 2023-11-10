@@ -10,17 +10,18 @@ import {
   Body,
   HttpStatus,
   HttpCode,
-  Head,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 import { Response } from 'express';
-import { JwtAuthGuard } from './guards/auth.guard';
-import { CurrentUser } from './decorators/current-user.decorator';
-import { KeycloakAuthZ } from './decorators/keycloak-authz.decorator';
-import { KeycloakAuthorizationGuard } from './guards/keycloak-authorization.guard';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import {
+  KcCurrentUser,
+  KeycloakAuthZ,
+  KeycloakAuthZGuard,
+  KeycloakJwtAuthGuard,
+} from '@app/keycloak';
 
 @Controller('auth')
 export class AuthController {
@@ -89,9 +90,9 @@ export class AuthController {
 
   // get user list
   @KeycloakAuthZ({ resource: 'report', scope: 'create' })
-  @UseGuards(JwtAuthGuard, KeycloakAuthorizationGuard)
+  @UseGuards(KeycloakJwtAuthGuard, KeycloakAuthZGuard)
   @Get('users')
-  async getUsers(@CurrentUser() user: any) {
+  async getUsers(@KcCurrentUser() user: any) {
     return {
       user,
     };

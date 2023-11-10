@@ -3,29 +3,29 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { KeycloakService } from '@app/keycloak';
 import { KeycloakAdminService } from '@app/keycloak-admin';
 import { Cron } from '@nestjs/schedule';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { KeycloakClientService } from '@app/keycloak-client';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly keycloakService: KeycloakService,
+    private readonly keycloakClientService: KeycloakClientService,
     private readonly keycloakAdminService: KeycloakAdminService,
   ) {}
 
   async login(loginDto: LoginDto) {
     const { username, password } = loginDto;
-    const token = await this.keycloakService.client.grant({
+    const token = await this.keycloakClientService.client.grant({
       scope: 'openid email profile',
       grant_type: 'password',
       username,
       password,
     });
 
-    const profile: any = await this.keycloakService.client.userinfo(
+    const profile: any = await this.keycloakClientService.client.userinfo(
       token.access_token,
     );
 
@@ -60,7 +60,7 @@ export class AuthService {
       });
 
       // get token set
-      const tokenSet = await this.keycloakService.client.grant({
+      const tokenSet = await this.keycloakClientService.client.grant({
         scope: 'openid email profile',
         grant_type: 'password',
         username,
@@ -68,7 +68,7 @@ export class AuthService {
       });
 
       // get profile
-      const profile: any = await this.keycloakService.client.userinfo(
+      const profile: any = await this.keycloakClientService.client.userinfo(
         tokenSet.access_token,
       );
 
@@ -93,8 +93,9 @@ export class AuthService {
   async refreshToken(refreshToken: string) {
     try {
       const onlyToken = refreshToken.replace('Bearer ', '');
-      const tokenSet = await this.keycloakService.client.refresh(onlyToken);
-      const profile: any = await this.keycloakService.client.userinfo(
+      const tokenSet =
+        await this.keycloakClientService.client.refresh(onlyToken);
+      const profile: any = await this.keycloakClientService.client.userinfo(
         tokenSet.access_token,
       );
       return {
@@ -113,7 +114,7 @@ export class AuthService {
   async logout(accessToken: string) {
     try {
       const onlyToken = accessToken.replace('Bearer ', '');
-      await this.keycloakService.client.revoke(onlyToken);
+      await this.keycloakClientService.client.revoke(onlyToken);
       return {
         message: 'Logout success',
       };
@@ -125,16 +126,16 @@ export class AuthService {
   /// -----------------------------------------------------------------------------//
 
   async getAuthorizationUrl() {
-    return this.keycloakService.getAuthorizationUrl();
+    return this.keycloakClientService.getAuthorizationUrl();
   }
 
   async getProfile(token: string) {
-    return await this.keycloakService.client.userinfo(token);
+    return await this.keycloakClientService.client.userinfo(token);
   }
 
   async callback(code: string) {
     try {
-      return await this.keycloakService.callback(code);
+      return await this.keycloakClientService.callback(code);
     } catch (e) {
       throw new UnauthorizedException();
     }
@@ -142,7 +143,7 @@ export class AuthService {
 
   // get realm roles
   async introspect(token: string) {
-    return await this.keycloakService.client.introspect(token);
+    return await this.keycloakClientService.client.introspect(token);
   }
 
   // get user list

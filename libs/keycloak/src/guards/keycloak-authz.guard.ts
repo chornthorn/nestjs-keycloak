@@ -3,15 +3,15 @@ import {
   ExecutionContext,
   ForbiddenException,
   Injectable,
+  Logger,
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { Reflector } from '@nestjs/core';
 import { catchError, firstValueFrom, map } from 'rxjs';
-import 'reflect-metadata';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class KeycloakAuthorizationGuard implements CanActivate {
+export class KeycloakAuthZGuard implements CanActivate {
   constructor(
     private readonly httpService: HttpService,
     private readonly reflector: Reflector,
@@ -38,7 +38,7 @@ export class KeycloakAuthorizationGuard implements CanActivate {
 
     const tokenUrl = this.configService.get<string>('KEYCLOAK_TOKEN_URL');
     const clientId = this.configService.get<string>('KEYCLOAK_CLIENT_ID');
-    const grantType = 'urn:ietf:params:oauth:grant-type:uma-ticket'; // fixed value do not change
+    const grantType = 'urn:ietf:params:oauth:grant-type:uma-ticket'; // fixed value do not change it
 
     // check if resource defined first (at class level) and scope defined second (at method level)
     const getResource: any = this.reflector.getAllAndOverride<string>(
@@ -72,8 +72,6 @@ export class KeycloakAuthorizationGuard implements CanActivate {
     // example: report#create
     const permission = `${resourceAndScope.resource}#scope:${resourceAndScope.scope}`;
 
-    console.log(resourceAndScope);
-
     const requestBody = {
       grant_type: grantType,
       audience: clientId,
@@ -92,15 +90,43 @@ export class KeycloakAuthorizationGuard implements CanActivate {
         .pipe(
           map((response) => {
             if (response.data) {
+              this.console({
+                data: resourceAndScope,
+                decision: true,
+              });
               return true;
             } else {
+              this.console({
+                data: resourceAndScope,
+                decision: false,
+              });
               throw new ForbiddenException();
             }
           }),
           catchError((error) => {
+            this.console({
+              data: resourceAndScope,
+              decision: false,
+            });
             throw new ForbiddenException();
           }),
         ),
+    );
+  }
+
+  private console({
+    data,
+    decision,
+  }: {
+    data: {
+      resource: string;
+      scope: string;
+    };
+    decision: boolean;
+  }) {
+    const logger = new Logger(KeycloakAuthZGuard.name);
+    logger.log(
+      `Resource: ${data.resource} - Scope: ${data.scope} - Decision: ${decision}`,
     );
   }
 }

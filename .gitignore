@@ -34,3 +34,4 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 /id_rsa.pub
+/libs/keycloak/.env

@@ -1,0 +1,415 @@
+{
+  "allowRemoteResourceManagement": true,
+  "policyEnforcementMode": "ENFORCING",
+  "resources": [
+    {
+      "name": "Default Resource",
+      "type": "urn:khode-api:resources:default",
+      "ownerManagedAccess": false,
+      "attributes": {},
+      "_id": "c3a52630-b11f-4010-bf17-277786f8e75c",
+      "uris": [
+        "/*"
+      ]
+    },
+    {
+      "name": "report",
+      "ownerManagedAccess": false,
+      "displayName": "Report",
+      "attributes": {},
+      "_id": "00b6f3c1-e0b5-4351-83c1-5796ec99311b",
+      "uris": [
+        "/api/reports/*"
+      ],
+      "scopes": [
+        {
+          "name": "scope:view"
+        },
+        {
+          "name": "scope:update"
+        },
+        {
+          "name": "scope:delete"
+        },
+        {
+          "name": "scope:create"
+        }
+      ],
+      "icon_uri": ""
+    },
+    {
+      "name": "product",
+      "ownerManagedAccess": false,
+      "displayName": "Product",
+      "attributes": {},
+      "_id": "377fd345-ed36-42ba-a7e6-1c7720209254",
+      "uris": [
+        "/api/products/*"
+      ],
+      "scopes": [
+        {
+          "name": "scope:viewAny"
+        },
+        {
+          "name": "scope:view"
+        },
+        {
+          "name": "scope:update"
+        },
+        {
+          "name": "scope:delete"
+        },
+        {
+          "name": "scope:create"
+        }
+      ],
+      "icon_uri": ""
+    },
+    {
+      "name": "orders",
+      "ownerManagedAccess": false,
+      "displayName": "Orders",
+      "attributes": {},
+      "_id": "c83b216b-bf62-44f4-9e98-a83c1309c952",
+      "uris": [
+        "/api/orders/*"
+      ],
+      "scopes": [
+        {
+          "name": "scope:reject"
+        },
+        {
+          "name": "scope:view"
+        },
+        {
+          "name": "scope:update"
+        },
+        {
+          "name": "scope:delete"
+        },
+        {
+          "name": "scope:create"
+        },
+        {
+          "name": "scope:approve"
+        },
+        {
+          "name": "scope:cancel"
+        }
+      ],
+      "icon_uri": ""
+    },
+    {
+      "name": "categories",
+      "ownerManagedAccess": false,
+      "displayName": "Category",
+      "attributes": {},
+      "_id": "c31af467-669d-4f1b-b774-12e9e7839a6b",
+      "uris": [
+        "/api/categories/*"
+      ],
+      "scopes": [
+        {
+          "name": "scope:viewAny"
+        },
+        {
+          "name": "scope:view"
+        },
+        {
+          "name": "scope:update"
+        },
+        {
+          "name": "scope:delete"
+        },
+        {
+          "name": "scope:create"
+        }
+      ],
+      "icon_uri": ""
+    }
+  ],
+  "policies": [
+    {
+      "id": "05651b52-9173-48e8-84cf-b1e40495fbe2",
+      "name": "Default Policy",
+      "description": "A policy that grants access only for users within this realm",
+      "type": "js",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
+      }
+    },
+    {
+      "id": "b78a22cd-bbc2-44bf-b5f3-c68f0a9d0be7",
+      "name": "Admin Policy",
+      "description": "",
+      "type": "role",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "roles": "[{\"id\":\"admin\",\"required\":true}]"
+      }
+    },
+    {
+      "id": "3a872b69-a564-4998-b986-1d3e55520d31",
+      "name": "Sale Policy",
+      "description": "",
+      "type": "group",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "groups": "[{\"path\":\"/Sale\",\"extendChildren\":false}]",
+        "groupsClaim": ""
+      }
+    },
+    {
+      "id": "666c4e4e-000c-4790-bddc-81d6e0ca3dde",
+      "name": "Manager Policy",
+      "description": "",
+      "type": "role",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "roles": "[{\"id\":\"manager\",\"required\":false}]"
+      }
+    },
+    {
+      "id": "59e7e814-4268-4912-910c-b8c245aaeb35",
+      "name": "Customer Policy",
+      "description": "",
+      "type": "role",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "roles": "[{\"id\":\"user\",\"required\":false}]"
+      }
+    },
+    {
+      "id": "ee75164f-6e88-436e-a0dd-536db8ef13cc",
+      "name": "Owner Policy",
+      "description": "",
+      "type": "role",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "roles": "[{\"id\":\"owner\",\"required\":false}]"
+      }
+    },
+    {
+      "id": "0a13a7ad-5e8d-4770-bf97-b22894508235",
+      "name": "Guest Policy",
+      "description": "",
+      "type": "role",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "roles": "[{\"id\":\"default-roles-khode\",\"required\":false}]"
+      }
+    },
+    {
+      "id": "568ccba3-f479-40e1-b951-0743ffbc02c7",
+      "name": "Update Order",
+      "description": "",
+      "type": "scope",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"orders\"]",
+        "scopes": "[\"scope:update\"]",
+        "applyPolicies": "[\"Manager Policy\",\"Owner Policy\"]"
+      }
+    },
+    {
+      "id": "4c10ec90-a50c-4423-9084-f5f589862e71",
+      "name": "Delete Order",
+      "description": "",
+      "type": "scope",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"orders\"]",
+        "scopes": "[\"scope:delete\"]",
+        "applyPolicies": "[\"Manager Policy\",\"Owner Policy\"]"
+      }
+    },
+    {
+      "id": "b3c8108d-6b5c-477b-aaeb-44e251d99937",
+      "name": "Create Order",
+      "description": "",
+      "type": "scope",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"orders\"]",
+        "scopes": "[\"scope:create\"]",
+        "applyPolicies": "[\"Customer Policy\"]"
+      }
+    },
+    {
+      "id": "09a09ae5-dae3-4183-a40e-208a080d3c11",
+      "name": "CRUD Product",
+      "description": "",
+      "type": "resource",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"product\"]",
+        "applyPolicies": "[\"Manager Policy\",\"Owner Policy\",\"Admin Policy\"]"
+      }
+    },
+    {
+      "id": "6b9236a0-a77d-4ac3-b8ad-057328584a4a",
+      "name": "View Report",
+      "description": "",
+      "type": "scope",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "resources": "[\"report\"]",
+        "scopes": "[\"scope:view\"]",
+        "applyPolicies": "[\"Sale Policy\"]"
+      }
+    },
+    {
+      "id": "652a6bc4-450d-4fe1-9f5c-22bdd87fd189",
+      "name": "View Product",
+      "description": "",
+      "type": "scope",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"product\"]",
+        "scopes": "[\"scope:view\",\"scope:viewAny\"]",
+        "applyPolicies": "[\"Customer Policy\",\"Manager Policy\",\"Owner Policy\"]"
+      }
+    },
+    {
+      "id": "f792570e-0746-4762-9171-bc151ec3d0c4",
+      "name": "View Order",
+      "description": "",
+      "type": "scope",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"orders\"]",
+        "scopes": "[\"scope:view\"]",
+        "applyPolicies": "[\"Customer Policy\",\"Manager Policy\",\"Owner Policy\"]"
+      }
+    },
+    {
+      "id": "2571cf22-e94a-457e-8e5b-5f359256309f",
+      "name": "Cancel Order",
+      "description": "",
+      "type": "scope",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "resources": "[\"orders\"]",
+        "scopes": "[\"scope:cancel\"]",
+        "applyPolicies": "[\"Manager Policy\"]"
+      }
+    },
+    {
+      "id": "c0ae404f-ef00-4807-bb51-686e99edbcc4",
+      "name": "Create Report",
+      "description": "",
+      "type": "scope",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"report\"]",
+        "scopes": "[\"scope:create\"]",
+        "applyPolicies": "[\"Sale Policy\"]"
+      }
+    },
+    {
+      "id": "dd69bf45-39f9-40c8-b733-5da8266cba02",
+      "name": "CRUD Category",
+      "description": "",
+      "type": "resource",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"categories\"]",
+        "applyPolicies": "[\"Admin Policy\"]"
+      }
+    },
+    {
+      "id": "1ba135bd-65d5-4463-86dd-e929748143e1",
+      "name": "Category - View ",
+      "description": "",
+      "type": "scope",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"categories\"]",
+        "scopes": "[\"scope:view\",\"scope:viewAny\"]",
+        "applyPolicies": "[\"Guest Policy\"]"
+      }
+    },
+    {
+      "id": "f7293704-0938-4a51-a341-ba39e51acbbc",
+      "name": "Default Permission",
+      "description": "A permission that applies to the default resource type",
+      "type": "resource",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "defaultResourceType": "urn:khode-api:resources:default",
+        "applyPolicies": "[\"Guest Policy\",\"Default Policy\"]"
+      }
+    }
+  ],
+  "scopes": [
+    {
+      "id": "3e72d41b-a68a-4604-8f82-b3555943aead",
+      "name": "scope:view",
+      "iconUri": "",
+      "displayName": "View By"
+    },
+    {
+      "id": "5f23a2b0-9a47-4cb5-af94-41d8ec6d2951",
+      "name": "scope:update",
+      "iconUri": "",
+      "displayName": "Update"
+    },
+    {
+      "id": "d009095c-62ac-4192-94a3-765f7fbf7746",
+      "name": "scope:delete",
+      "iconUri": "",
+      "displayName": "Delete"
+    },
+    {
+      "id": "5783c7cb-ade7-443c-933a-7d7f18b3e1f7",
+      "name": "scope:create",
+      "iconUri": "",
+      "displayName": "Create New"
+    },
+    {
+      "id": "fc8f1961-03d9-40ec-ac1c-4eca4e9e6b32",
+      "name": "scope:cancel",
+      "iconUri": "",
+      "displayName": "Cancel"
+    },
+    {
+      "id": "e9c0ef16-e29d-4b39-83dd-b5fe437a046f",
+      "name": "scope:reject",
+      "iconUri": "",
+      "displayName": "Reject"
+    },
+    {
+      "id": "993adff6-0511-47bd-a3af-de08b6f307fa",
+      "name": "scope:approve",
+      "iconUri": "",
+      "displayName": "Approve"
+    },
+    {
+      "id": "bf148202-01a4-49c9-bdba-51ebd72b9101",
+      "name": "scope:viewAny",
+      "iconUri": "",
+      "displayName": "View Any"
+    }
+  ],
+  "decisionStrategy": "AFFIRMATIVE"
+}

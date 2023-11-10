@@ -11,11 +11,13 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { JwtAuthGuard } from '../auth/guards/auth.guard';
-import { KeycloakAuthorizationGuard } from '../auth/guards/keycloak-authorization.guard';
-import { KeycloakAuthZ } from '../auth/decorators/keycloak-authz.decorator';
+import {
+  KeycloakAuthZ,
+  KeycloakAuthZGuard,
+  KeycloakJwtAuthGuard,
+} from '@app/keycloak';
 
-@UseGuards(JwtAuthGuard, KeycloakAuthorizationGuard)
+@UseGuards(KeycloakJwtAuthGuard, KeycloakAuthZGuard)
 @KeycloakAuthZ({ resource: 'product' })
 @Controller('products')
 export class ProductsController {
