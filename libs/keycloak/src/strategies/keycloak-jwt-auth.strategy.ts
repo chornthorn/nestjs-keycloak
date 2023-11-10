@@ -2,7 +2,6 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
-import { readFileSync } from 'fs';
 import { Request } from 'express';
 
 @Injectable()
@@ -14,9 +13,11 @@ export class KeycloakJwtAuthStrategy extends PassportStrategy(
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: readFileSync('./id_rsa.pub'),
+      secretOrKey: configService
+        .get<string>('RSA_PUBLIC_KEY')
+        .replace(/\\n/g, '\n'),
       algorithms: ['RS256'],
-      passReqToCallback: true, // pass request object to the callback below for providing access token to the object
+      passReqToCallback: true,
     });
   }
 

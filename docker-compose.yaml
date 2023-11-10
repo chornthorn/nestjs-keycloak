@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  nestapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: prod-stage
+    ports:
+      - "3000:3000"
+    environment:
+      - KEYCLOAK_TOKEN_URL=https://account.google.com/auth/protocol/openid-connect/token
+      - KEYCLOAK_CLIENT_ID=khode-api
+      - RSA_PUBLIC_KEY=nest
+      - REALM=khode
+      - CLIENT_ID=khode-api
+      - CLIENT_SECRET=NE48hwBkfAfcqJdyUU2tXjC7HpXR5BJv
+      - AUTH_BASE_URL=http://localhost:8080
+      - REDIRECT_URI=http://localhost:3000/api/auth/callback
+      - RESPONSE_TYPE=code
+      - SCOPE="openid profile email"
+      - ADMIN_AUTH_BASE_URL=http://localhost:8080
+      - ADMIN_REALM=khode
+      - ADMIN_USER=admin
+      - ADMIN_PASSWORD=admin
