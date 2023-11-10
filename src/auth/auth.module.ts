@@ -9,22 +9,26 @@ import { ConfigService } from '@nestjs/config';
   imports: [
     KeycloakClientModule.registerAsync({
       useFactory: (configService: ConfigService) => ({
-        realm: configService.getOrThrow<string>('REALM'),
-        client_id: configService.getOrThrow<string>('CLIENT_ID'),
-        client_secret: configService.getOrThrow<string>('CLIENT_SECRET'),
-        auth_base_url: configService.getOrThrow<string>('AUTH_BASE_URL'),
-        redirect_uris: configService.getOrThrow<string[]>('REDIRECT_URI'),
-        response_types: configService.getOrThrow<string[]>('RESPONSE_TYPE'),
-        scope: configService.getOrThrow<string>('SCOPE'),
+        realm: configService.get<string>('KEYCLOAK_REALM'),
+        client_id: configService.get<string>('KEYCLOAK_CLIENT_ID'),
+        client_secret: configService.get<string>('KEYCLOAK_CLIENT_SECRET'),
+        auth_base_url: configService.get<string>('KEYCLOAK_BASE_URL'),
+        redirect_uris: [
+          ...configService.get<string>('KEYCLOAK_REDIRECT_URIS').split(','),
+        ],
+        response_types: [
+          ...configService.get<string>('KEYCLOAK_RESPONSE_TYPES').split(','),
+        ],
+        scope: configService.get<string>('KEYCLOAK_CLIENT_SCOPE'),
       }),
       inject: [ConfigService],
     }),
     KeycloakAdminModule.registerAsync({
       useFactory: (configService: ConfigService) => ({
-        baseUrl: configService.getOrThrow<string>('ADMIN_AUTH_BASE_URL'),
-        realmName: configService.getOrThrow<string>('ADMIN_REALM'),
-        username: configService.getOrThrow<string>('ADMIN_USER'),
-        password: configService.getOrThrow<string>('ADMIN_PASSWORD'),
+        baseUrl: configService.get<string>('KEYCLOAK_BASE_URL'),
+        realmName: configService.get<string>('KEYCLOAK_REALM'),
+        username: configService.get<string>('KEYCLOAK_ADMIN_USERNAME'),
+        password: configService.get<string>('KEYCLOAK_ADMIN_PASSWORD'),
       }),
       inject: [ConfigService],
     }),

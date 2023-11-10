@@ -17,25 +17,35 @@ export class AuthService {
   ) {}
 
   async login(loginDto: LoginDto) {
-    const { username, password } = loginDto;
-    const token = await this.keycloakClientService.client.grant({
-      scope: 'openid email profile',
-      grant_type: 'password',
-      username,
-      password,
-    });
+    try {
+      const { username, password } = loginDto;
+      const token = await this.keycloakClientService.client.grant({
+        scope: 'openid email profile',
+        grant_type: 'password',
+        username,
+        password,
+      });
 
-    const profile: any = await this.keycloakClientService.client.userinfo(
-      token.access_token,
-    );
+      const profile: any = await this.keycloakClientService.client.userinfo(
+        token.access_token,
+      );
 
-    return {
-      access_token: token.access_token,
-      refresh_token: token.refresh_token,
-      expires_in: token.expires_in,
-      token_type: token.token_type,
-      profile,
-    };
+      return {
+        access_token: token.access_token,
+        refresh_token: token.refresh_token,
+        expires_in: token.expires_in,
+        token_type: token.token_type,
+        profile,
+      };
+    } catch (e) {
+      if (e.error === 'invalid_grant') {
+        throw new BadRequestException('Invalid username or password');
+      } else if (e.error === 'unauthorized_client') {
+        throw new BadRequestException('Invalid client credentials');
+      } else {
+        throw new BadRequestException(e.description || 'Login failed');
+      }
+    }
   }
 
   // register
@@ -80,7 +90,6 @@ export class AuthService {
         profile,
       };
     } catch (e) {
-      console.log(e);
       if (e.response.status === 409) {
         throw new BadRequestException('Email already exists');
       } else {
@@ -106,7 +115,7 @@ export class AuthService {
         profile,
       };
     } catch (e) {
-      throw new UnauthorizedException();
+      throw new BadRequestException('Refresh token failed');
     }
   }
 
@@ -158,7 +167,7 @@ export class AuthService {
     console.log('reAuthenAdmin');
     await this.keycloakAdminService.reAuthenticate({
       username: 'admin',
-      password: 'admin',
+      password: 'admin@123@',
     });
   }
 }

@@ -14,7 +14,7 @@ export class KeycloakJwtAuthStrategy extends PassportStrategy(
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: configService
-        .get<string>('RSA_PUBLIC_KEY')
+        .get<string>('KEYCLOAK_RSA_PUBLIC_KEY')
         .replace(/\\n/g, '\n'),
       algorithms: ['RS256'],
       passReqToCallback: true,
