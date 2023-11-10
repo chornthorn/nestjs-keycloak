@@ -3,6 +3,36 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "deleteOutDir": true
+    "deleteOutDir": true,
+    "webpack": true
+  },
+  "projects": {
+    "keycloak": {
+      "type": "library",
+      "root": "libs/keycloak",
+      "entryFile": "index",
+      "sourceRoot": "libs/keycloak/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/keycloak/tsconfig.lib.json"
+      }
+    },
+    "keycloak-admin": {
+      "type": "library",
+      "root": "libs/keycloak-admin",
+      "entryFile": "index",
+      "sourceRoot": "libs/keycloak-admin/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/keycloak-admin/tsconfig.lib.json"
+      }
+    },
+    "keycloak-client": {
+      "type": "library",
+      "root": "libs/keycloak-client",
+      "entryFile": "index",
+      "sourceRoot": "libs/keycloak-client/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/keycloak-client/tsconfig.lib.json"
+      }
+    }
   }
 }

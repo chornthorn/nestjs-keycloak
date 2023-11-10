@@ -16,6 +16,26 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@app/keycloak": [
+        "libs/keycloak/src"
+      ],
+      "@app/keycloak/*": [
+        "libs/keycloak/src/*"
+      ],
+      "@app/keycloak-admin": [
+        "libs/keycloak-admin/src"
+      ],
+      "@app/keycloak-admin/*": [
+        "libs/keycloak-admin/src/*"
+      ],
+      "@app/keycloak-client": [
+        "libs/keycloak-client/src"
+      ],
+      "@app/keycloak-client/*": [
+        "libs/keycloak-client/src/*"
+      ]
+    }
   }
 }

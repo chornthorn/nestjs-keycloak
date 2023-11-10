@@ -1,9 +1,21 @@
 {
-  "moduleFileExtensions": ["js", "json", "ts"],
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
   "rootDir": ".",
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "@app/keycloak/(.*)": "<rootDir>/../libs/keycloak/src/$1",
+    "@app/keycloak": "<rootDir>/../libs/keycloak/src",
+    "@app/keycloak-admin/(.*)": "<rootDir>/../libs/keycloak-admin/src/$1",
+    "@app/keycloak-admin": "<rootDir>/../libs/keycloak-admin/src",
+    "@app/keycloak-client/(.*)": "<rootDir>/../libs/keycloak-client/src/$1",
+    "@app/keycloak-client": "<rootDir>/../libs/keycloak-client/src"
   }
 }
