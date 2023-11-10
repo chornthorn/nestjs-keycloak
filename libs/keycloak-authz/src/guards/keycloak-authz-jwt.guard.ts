@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
 
 @Injectable()
-export class KeycloakJwtAuthGuard extends AuthGuard('keycloak-jwt-auth') {
+export class KeycloakAuthzJwtGuard extends AuthGuard('keycloak-jwt-auth') {
   constructor(private reflector: Reflector) {
     super();
   }

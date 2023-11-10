@@ -2,12 +2,12 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { MODULE_OPTIONS_TOKEN } from './keycloak-admin.module-definition';
 import { KeycloakAdminModuleOptions } from './keycloak-admin.module-options';
 import { KeycloakAdminClient } from '@s3pweb/keycloak-admin-client-cjs';
-import { KeycloakService } from '@app/keycloak';
+import { KeycloakAdminModule } from './keycloak-admin.module';
 
 @Injectable()
 export class KeycloakAdminService {
   private readonly kcAdminClient: KeycloakAdminClient;
-  private logger = new Logger(KeycloakService.name);
+  private logger = new Logger(KeycloakAdminModule.name);
 
   /**
    * Constructs a new instance of the class.

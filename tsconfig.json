@@ -35,6 +35,18 @@
       ],
       "@app/keycloak-client/*": [
         "libs/keycloak-client/src/*"
+      ],
+      "@app/keycloak-authz": [
+        "libs/keycloak-authz/src"
+      ],
+      "@app/keycloak-authz/*": [
+        "libs/keycloak-authz/src/*"
+      ],
+      "@app/keycloak-authn": [
+        "libs/keycloak-authn/src"
+      ],
+      "@app/keycloak-authn/*": [
+        "libs/keycloak-authn/src/*"
       ]
     }
   }

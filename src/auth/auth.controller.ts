@@ -12,16 +12,14 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-
 import { Response } from 'express';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import {
   KcCurrentUser,
-  KeycloakAuthZ,
-  KeycloakAuthZGuard,
-  KeycloakJwtAuthGuard,
-} from '@app/keycloak';
+  KeycloakAuthz,
+  UseKeycloakAuthzGuard,
+} from '@app/keycloak-authz';
 
 @Controller('auth')
 export class AuthController {
@@ -89,8 +87,8 @@ export class AuthController {
   }
 
   // get user list
-  @KeycloakAuthZ({ resource: 'report', scope: 'create' })
-  @UseGuards(KeycloakJwtAuthGuard, KeycloakAuthZGuard)
+  @KeycloakAuthz({ resource: 'report', scope: 'create' })
+  @UseKeycloakAuthzGuard()
   @Get('users')
   async getUsers(@KcCurrentUser() user: any) {
     return {

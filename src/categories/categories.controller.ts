@@ -6,43 +6,38 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import {
-  KeycloakAuthZ,
-  KeycloakAuthZGuard,
-  KeycloakJwtAuthGuard,
-} from '@app/keycloak';
+import { KeycloakAuthz, UseKeycloakAuthzGuard } from '@app/keycloak-authz';
 
 @Controller('categories')
-@UseGuards(KeycloakJwtAuthGuard, KeycloakAuthZGuard)
-@KeycloakAuthZ({ resource: 'categories' })
+@UseKeycloakAuthzGuard()
+@KeycloakAuthz({ resource: 'categories' })
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Post()
-  @KeycloakAuthZ({ scope: 'create' })
+  @KeycloakAuthz({ scope: 'create' })
   create(@Body() createCategoryDto: CreateCategoryDto) {
     return this.categoriesService.create(createCategoryDto);
   }
 
   @Get()
-  @KeycloakAuthZ({ scope: 'viewAny' })
+  @KeycloakAuthz({ scope: 'viewAny' })
   findAll() {
     return this.categoriesService.findAll();
   }
 
   @Get(':id')
-  @KeycloakAuthZ({ scope: 'view' })
+  @KeycloakAuthz({ scope: 'view' })
   findOne(@Param('id') id: string) {
     return this.categoriesService.findOne(+id);
   }
 
   @Patch(':id')
-  @KeycloakAuthZ({ scope: 'update' })
+  @KeycloakAuthz({ scope: 'update' })
   update(
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
@@ -51,7 +46,7 @@ export class CategoriesController {
   }
 
   @Delete(':id')
-  @KeycloakAuthZ({ scope: 'delete' })
+  @KeycloakAuthz({ scope: 'delete' })
   remove(@Param('id') id: string) {
     return this.categoriesService.remove(+id);
   }

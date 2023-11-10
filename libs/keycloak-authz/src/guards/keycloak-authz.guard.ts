@@ -8,14 +8,14 @@ import {
 import { HttpService } from '@nestjs/axios';
 import { Reflector } from '@nestjs/core';
 import { catchError, firstValueFrom, map } from 'rxjs';
-import { ConfigService } from '@nestjs/config';
+import { KeycloakAuthzService } from '../keycloak-authz.service';
 
 @Injectable()
-export class KeycloakAuthZGuard implements CanActivate {
+export class KeycloakAuthzGuard implements CanActivate {
   constructor(
     private readonly httpService: HttpService,
     private readonly reflector: Reflector,
-    private readonly configService: ConfigService,
+    private readonly keycloakAuthzService: KeycloakAuthzService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -33,30 +33,33 @@ export class KeycloakAuthZGuard implements CanActivate {
     const { user } = request;
 
     if (!user) {
-      throw new ForbiddenException();
+      throw new ForbiddenException(
+        'You are not authorized to access this resource',
+      );
     }
 
-    const tokenUrl = this.configService.get<string>('KEYCLOAK_TOKEN_URL');
-    const clientId = this.configService.get<string>('KEYCLOAK_CLIENT_ID');
+    const clientId = this.keycloakAuthzService.options.clientId;
+    const baseUrl = this.keycloakAuthzService.options.baseUrl;
+    const realm = this.keycloakAuthzService.options.realm;
+    const tokenUrl = `${baseUrl}/realms/${realm}/protocol/openid-connect/token`;
     const grantType = 'urn:ietf:params:oauth:grant-type:uma-ticket'; // fixed value do not change it
+    const metadataKey = 'KeycloakAuthZ';
 
     // check if resource defined first (at class level) and scope defined second (at method level)
-    const getResource: any = this.reflector.getAllAndOverride<string>(
-      'KeycloakAuthZ',
-      [context.getClass()],
-    );
+    const getResource: { resource: string } = this.reflector.getAllAndOverride<{
+      resource: string;
+    }>(metadataKey, [context.getClass()]);
 
-    const getScope: any = this.reflector.getAllAndOverride<string>(
-      'KeycloakAuthZ',
-      [context.getHandler()],
-    );
+    const getScope: { scope: string } = this.reflector.getAllAndOverride<{
+      scope: string;
+    }>(metadataKey, [context.getHandler()]);
 
-    // get resource and scope from metadata
     // check if both resource and scope are defined at method level
-    const resourceAndScope: any = this.reflector.getAllAndOverride<string[]>(
-      'KeycloakAuthZ',
-      [context.getHandler(), context.getClass()],
-    );
+    const resourceAndScope: { resource: string; scope: string } =
+      this.reflector.getAllAndOverride<{ resource: string; scope: string }>(
+        metadataKey,
+        [context.getHandler(), context.getClass()],
+      );
 
     // condition
     if (getResource && getScope) {
@@ -65,10 +68,12 @@ export class KeycloakAuthZGuard implements CanActivate {
     }
 
     if (!resourceAndScope) {
-      throw new ForbiddenException();
+      throw new ForbiddenException(
+        'You are not authorized to access this resource',
+      );
     }
 
-    // template: resource#scope
+    // keycloak template: resource#scope
     // example: report#create
     const permission = `${resourceAndScope.resource}#scope:${resourceAndScope.scope}`;
 
@@ -76,7 +81,7 @@ export class KeycloakAuthZGuard implements CanActivate {
       grant_type: grantType,
       audience: clientId,
       permission: permission,
-      response_mode: 'decision',
+      response_mode: 'decision', // for keycloak to return response as boolean [true|false]
     };
 
     return await firstValueFrom(
@@ -100,7 +105,9 @@ export class KeycloakAuthZGuard implements CanActivate {
                 data: resourceAndScope,
                 decision: false,
               });
-              throw new ForbiddenException();
+              throw new ForbiddenException(
+                'You are not authorized to access this resource',
+              );
             }
           }),
           catchError((error) => {
@@ -108,7 +115,9 @@ export class KeycloakAuthZGuard implements CanActivate {
               data: resourceAndScope,
               decision: false,
             });
-            throw new ForbiddenException();
+            throw new ForbiddenException(
+              'You are not authorized to access this resource',
+            );
           }),
         ),
     );
@@ -124,7 +133,7 @@ export class KeycloakAuthZGuard implements CanActivate {
     };
     decision: boolean;
   }) {
-    const logger = new Logger(KeycloakAuthZGuard.name);
+    const logger = new Logger(KeycloakAuthzGuard.name);
     logger.log(
       `Resource: ${data.resource} - Scope: ${data.scope} - Decision: ${decision}`,
     );

@@ -1,21 +1,19 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
+import { KeycloakAuthzService } from '../keycloak-authz.service';
 
 @Injectable()
-export class KeycloakJwtAuthStrategy extends PassportStrategy(
+export class KeycloakAuthzJwtStrategy extends PassportStrategy(
   Strategy,
   'keycloak-jwt-auth',
 ) {
-  constructor(private configService: ConfigService) {
+  constructor(private readonly keycloakAuthzService: KeycloakAuthzService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: configService
-        .get<string>('KEYCLOAK_RSA_PUBLIC_KEY')
-        .replace(/\\n/g, '\n'),
+      secretOrKey: keycloakAuthzService.getRSAPublicKey,
       algorithms: ['RS256'],
       passReqToCallback: true,
     });

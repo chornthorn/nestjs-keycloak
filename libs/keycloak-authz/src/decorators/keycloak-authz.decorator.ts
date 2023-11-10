@@ -8,7 +8,7 @@ export type KeycloakResource =
   | 'order'
   | 'categories';
 
-export const KeycloakAuthZ = (data: {
+export const KeycloakAuthz = (data: {
   resource?: KeycloakResource;
   scope?: KeycloakScope;
 }) => SetMetadata('KeycloakAuthZ', data);

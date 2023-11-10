@@ -16,6 +16,10 @@
     "@app/keycloak-admin/(.*)": "<rootDir>/../libs/keycloak-admin/src/$1",
     "@app/keycloak-admin": "<rootDir>/../libs/keycloak-admin/src",
     "@app/keycloak-client/(.*)": "<rootDir>/../libs/keycloak-client/src/$1",
-    "@app/keycloak-client": "<rootDir>/../libs/keycloak-client/src"
+    "@app/keycloak-client": "<rootDir>/../libs/keycloak-client/src",
+    "@app/keycloak-authz/(.*)": "<rootDir>/../libs/keycloak-authz/src/$1",
+    "@app/keycloak-authz": "<rootDir>/../libs/keycloak-authz/src",
+    "@app/keycloak-authn/(.*)": "<rootDir>/../libs/keycloak-authn/src/$1",
+    "@app/keycloak-authn": "<rootDir>/../libs/keycloak-authn/src"
   }
 }

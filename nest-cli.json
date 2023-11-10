@@ -7,15 +7,6 @@
     "webpack": true
   },
   "projects": {
-    "keycloak": {
-      "type": "library",
-      "root": "libs/keycloak",
-      "entryFile": "index",
-      "sourceRoot": "libs/keycloak/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/keycloak/tsconfig.lib.json"
-      }
-    },
     "keycloak-admin": {
       "type": "library",
       "root": "libs/keycloak-admin",
@@ -32,6 +23,24 @@
       "sourceRoot": "libs/keycloak-client/src",
       "compilerOptions": {
         "tsConfigPath": "libs/keycloak-client/tsconfig.lib.json"
+      }
+    },
+    "keycloak-authz": {
+      "type": "library",
+      "root": "libs/keycloak-authz",
+      "entryFile": "index",
+      "sourceRoot": "libs/keycloak-authz/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/keycloak-authz/tsconfig.lib.json"
+      }
+    },
+    "keycloak-authn": {
+      "type": "library",
+      "root": "libs/keycloak-authn",
+      "entryFile": "index",
+      "sourceRoot": "libs/keycloak-authn/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/keycloak-authn/tsconfig.lib.json"
       }
     }
   }
