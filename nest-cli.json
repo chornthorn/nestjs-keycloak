@@ -33,15 +33,6 @@
       "compilerOptions": {
         "tsConfigPath": "libs/keycloak-authz/tsconfig.lib.json"
       }
-    },
-    "keycloak-authn": {
-      "type": "library",
-      "root": "libs/keycloak-authn",
-      "entryFile": "index",
-      "sourceRoot": "libs/keycloak-authn/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/keycloak-authn/tsconfig.lib.json"
-      }
     }
   }
 }
