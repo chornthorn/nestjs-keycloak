@@ -3,6 +3,8 @@ import { MODULE_OPTIONS_TOKEN } from './keycloak-admin.module-definition';
 import { KeycloakAdminModuleOptions } from './keycloak-admin.module-options';
 import { KeycloakAdminClient } from '@s3pweb/keycloak-admin-client-cjs';
 import { KeycloakAdminModule } from './keycloak-admin.module';
+import { KeycloakClientService } from '@app/keycloak-client';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class KeycloakAdminService {
@@ -13,9 +15,11 @@ export class KeycloakAdminService {
    * Constructs a new instance of the class.
    *
    * @param {KeycloakAdminModuleOptions} options - the module options
+   * @param keycloakClientService
    */
   constructor(
     @Inject(MODULE_OPTIONS_TOKEN) private options: KeycloakAdminModuleOptions,
+    private readonly keycloakClientService: KeycloakClientService,
   ) {
     this.kcAdminClient = new KeycloakAdminClient({
       baseUrl: options.baseUrl,
@@ -78,5 +82,18 @@ export class KeycloakAdminService {
       username: username,
       password: password,
     });
+  }
+
+  // get access token for admin client
+  // run every 58 seconds
+  @Cron('*/58 * * * * *')
+  private async getAccessToken() {
+    const refreshToken = this.kcAdminClient.refreshToken;
+
+    const tokenSet =
+      await this.keycloakClientService.client.refresh(refreshToken);
+    this.kcAdminClient.setAccessToken(tokenSet.access_token);
+
+    console.log('admin client get access token success');
   }
 }

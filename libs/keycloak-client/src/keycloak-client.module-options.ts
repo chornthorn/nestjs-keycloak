@@ -18,9 +18,9 @@ export interface KeycloakClientModuleOptions {
   auth_base_url: string;
   realm: string;
   client_id: string;
-  client_secret: string;
-  redirect_uris: string[];
-  response_types: ResponseType[];
+  client_secret?: string;
+  redirect_uris?: string[];
+  response_types?: ResponseType[];
   scope?: string;
   post_logout_redirect_uris?: string[];
   default_max_age?: number;

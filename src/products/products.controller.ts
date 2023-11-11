@@ -13,7 +13,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { KeycloakAuthz, UseKeycloakAuthzGuard } from '@app/keycloak-authz';
 
 @UseKeycloakAuthzGuard()
-@KeycloakAuthz({ resource: 'product' })
+@KeycloakAuthz({ resource: 'products' })
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}

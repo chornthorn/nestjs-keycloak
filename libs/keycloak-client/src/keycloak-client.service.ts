@@ -20,6 +20,7 @@ export class KeycloakClientService {
         response_types: options.response_types,
         scope: options.scope,
         default_max_age: options.default_max_age,
+        ...options,
       });
     });
   }

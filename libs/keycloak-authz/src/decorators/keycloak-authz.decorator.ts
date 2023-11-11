@@ -4,7 +4,7 @@ export type KeycloakScope = 'create' | 'view' | 'viewAny' | 'update' | 'delete';
 export type KeycloakResource =
   | 'report'
   | 'user'
-  | 'product'
+  | 'products'
   | 'order'
   | 'categories';
 

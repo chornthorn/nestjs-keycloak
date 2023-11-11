@@ -36,3 +36,4 @@ lerna-debug.log*
 /id_rsa.pub
 /libs/keycloak/.env
 /.env
+/libs/keycloak-admin/.env
