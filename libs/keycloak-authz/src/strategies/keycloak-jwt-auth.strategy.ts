@@ -1,8 +1,9 @@
 import { PassportStrategy } from '@nestjs/passport';
-import { ExecutionContext, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
 import { KeycloakAuthzService } from '../keycloak-authz.service';
+import { UserPayload } from '../types/user-payload.type';
 
 @Injectable()
 export class KeycloakAuthzJwtStrategy extends PassportStrategy(
@@ -19,7 +20,7 @@ export class KeycloakAuthzJwtStrategy extends PassportStrategy(
     });
   }
 
-  async validate(request: Request, payload: any) {
+  async validate(request: Request, payload: UserPayload) {
     return {
       id: payload.sub,
       email: payload?.email || null,
