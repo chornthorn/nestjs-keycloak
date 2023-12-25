@@ -104,8 +104,8 @@ devDependencies:
     specifier: ^9.0.0
     version: 9.0.0(eslint@8.53.0)
   eslint-plugin-prettier:
-    specifier: ^5.0.0
-    version: 5.0.1(eslint-config-prettier@9.0.0)(eslint@8.53.0)(prettier@3.0.3)
+    specifier: ^5.1.1
+    version: 5.1.1(eslint-config-prettier@9.0.0)(eslint@8.53.0)(prettier@3.0.3)
   jest:
     specifier: ^29.5.0
     version: 29.7.0(@types/node@20.9.0)(ts-node@10.9.1)
@@ -2620,8 +2620,8 @@ packages:
       eslint: 8.53.0
     dev: true
 
-  /eslint-plugin-prettier@5.0.1(eslint-config-prettier@9.0.0)(eslint@8.53.0)(prettier@3.0.3):
-    resolution: {integrity: sha512-m3u5RnR56asrwV/lDC4GHorlW75DsFfmUcjfCYylTUs85dBRnB7VM6xG8eCMJdeDRnppzmxZVf1GEPJvl1JmNg==}
+  /eslint-plugin-prettier@5.1.1(eslint-config-prettier@9.0.0)(eslint@8.53.0)(prettier@3.0.3):
+    resolution: {integrity: sha512-WQpV3mSmIobb77s4qiCZu3dBrZZ0rj8ckSfBtRrgNK9Wnh2s3eiaxNTWloz1LJ1WtvqZES/PAI7PLvsrGt/CEA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       '@types/eslint': '>=8.0.0'
