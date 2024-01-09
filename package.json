@@ -27,7 +27,7 @@
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/mapped-types": "*",
     "@nestjs/passport": "^10.0.2",
-    "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/platform-express": "^10.3.0",
     "@nestjs/schedule": "^4.0.0",
     "@s3pweb/keycloak-admin-client-cjs": "^22.0.1",
     "axios": "^1.6.1",
